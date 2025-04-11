@@ -8,7 +8,7 @@
 
 
 ## 📚 Key Code
-```ts
+```
 // 핵심이 되는 코드를 첨부합니다
 import java.nio.file.*;
 import java.io.IOException;
@@ -21,3 +21,4 @@ public class FileReader {
 ```
 ## 📢 To Reviewers
 - 리뷰어에게 전달하고 싶은 내용을 작성합니다
+
