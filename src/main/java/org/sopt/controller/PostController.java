@@ -1,9 +1,9 @@
 package org.sopt.controller;
 
-import org.sopt.domain.Post;
 import org.sopt.dto.ApiResponse;
 import org.sopt.dto.req.PostCreateRequest;
 import org.sopt.dto.res.PostCreateResponse;
+import org.sopt.dto.res.PostDetailResponse;
 import org.sopt.service.PostService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 public class PostController {
@@ -34,16 +33,22 @@ public class PostController {
                 .body(body);
     }
 
-    @GetMapping("/posts")
-    public ResponseEntity<?> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+//    @GetMapping("/posts")
+//    public ResponseEntity<?> getAllPosts() {
+//        return ResponseEntity.ok(postService.getAllPosts());
+//    }
+
+    @GetMapping("/posts/{id}")
+    public ResponseEntity<ApiResponse<PostDetailResponse>> getPost(@PathVariable final Long id) {
+        PostDetailResponse PostDetailResponse = postService.getPost(id);
+
+        ApiResponse<PostDetailResponse> body = new ApiResponse<>(200, "응답 성공", PostDetailResponse);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(body);
     }
 
-//    @GetMapping("/posts/{id}")
-//    public Post getPostById(int id) {
-//        return postService.getPostById(id);
-//    }
-//
 //    @PutMapping("/posts/{id}")
 //    public boolean updatePostTitle(int updateId, String newTitle) {
 //        return postService.updatePostTitle(updateId, newTitle);

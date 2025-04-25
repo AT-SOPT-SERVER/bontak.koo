@@ -3,10 +3,10 @@ package org.sopt.service;
 import org.sopt.domain.Post;
 import org.sopt.dto.req.PostCreateRequest;
 import org.sopt.dto.res.PostCreateResponse;
+import org.sopt.dto.res.PostDetailResponse;
 import org.sopt.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class PostService {
@@ -24,13 +24,15 @@ public class PostService {
     }
 
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
-    }
-
-//    public Post getPostById(int id) {
-//        return postRepository.findPostById(id);
+//    public List<Post> getAllPosts() {
+//        return postRepository.findAll();
 //    }
+
+    public PostDetailResponse getPost(final Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        return PostDetailResponse.of(post.getId(), post.getTitle());
+    }
 //
 //    public boolean updatePostTitle(int updateId, String newTitle) {
 //        return postRepository.updatePostTitle(updateId, newTitle);
