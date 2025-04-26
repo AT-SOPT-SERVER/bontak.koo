@@ -1,39 +1,30 @@
 package org.sopt.domain;
 
-import org.sopt.util.IDGenerator;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-import java.time.LocalDateTime;
-
+@Entity
 public class Post {
-    private final int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
-    private final LocalDateTime time;
 
-    public Post(String title) {
-        this.id = IDGenerator.getId();
-        this.setTitle(title);
-        this.time = LocalDateTime.now();
+    public Post() {
+
     }
 
-    public int getId() {
-        return this.id;
+    public Post(String title) {
+        this.title = title;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getTitle() {
         return this.title;
-    }
-
-    public void setTitle(String title) {
-        if (title.length() > 30) {
-            this.title = title.substring(0, 30);
-        } else {
-            this.title = title;
-
-        }
-    }
-
-
-    public LocalDateTime getTime() {
-        return this.time;
     }
 }

@@ -1,90 +1,49 @@
 package org.sopt.service;
 
 import org.sopt.domain.Post;
+import org.sopt.dto.req.PostCreateRequest;
+import org.sopt.dto.res.PostCreateResponse;
+import org.sopt.dto.res.PostDetailResponse;
+import org.sopt.dto.res.PostListResponse;
 import org.sopt.repository.PostRepository;
+import org.springframework.stereotype.Service;
 
-import java.io.*;
-import java.time.LocalDateTime;
-import java.time.Duration;
-import java.util.List;
 
+@Service
 public class PostService {
-    private final PostRepository postRepository = new PostRepository();
+    private final PostRepository postRepository;
 
-    public boolean createPost(String title) {
-        boolean flag = true;
-
-        if (!this.getAllPosts().isEmpty()) {
-            LocalDateTime latestPostTime = getAllPosts().get(getAllPosts().size() - 1).getTime();
-            LocalDateTime now = LocalDateTime.now();
-            Duration duration = Duration.between(latestPostTime, now);
-            if (duration.toMinutes() < 3) {
-                flag = false;
-            }
-        }
-
-        if (flag) {
-            Post post = new Post(title);
-            postRepository.save(post);
-            return true;
-        } else {
-            return false;
-        }
-
-
+    public PostService(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public PostCreateResponse createPost(PostCreateRequest PostCreateRequest) {
+        Post post = new Post(PostCreateRequest.title());
+        postRepository.save(post);
+
+        return PostCreateResponse.from(post);
     }
 
-    public Post getPostById(int id) {
-        return postRepository.findPostById(id);
+
+    public PostListResponse getAllPosts() {
+        return PostListResponse.of(postRepository.findAll());
     }
 
-    public boolean updatePostTitle(int updateId, String newTitle) {
-        return postRepository.updatePostTitle(updateId, newTitle);
+    public PostDetailResponse getPost(final Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id=" + id));
+
+        return PostDetailResponse.of(post.getId(), post.getTitle());
     }
-
-    public boolean deletePostById(int id) {
-        return postRepository.delete(id);
-    }
-
-    public List<Post> searchPostsByKeyword(String keyword) {
-        return postRepository.searchPostsByKeyword(keyword);
-    }
-
-    public void saveToFile() {
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter("./src/main/java/org/sopt/assets/Post.txt"));
-
-            for (Post post : getAllPosts()) {
-                writer.write(post.getTitle() + "\n");
-            }
-
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void loadFromFile() {
-
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("./src/main/java/org/sopt/assets/Post.txt"));
-
-
-            String title;
-            while ((title = reader.readLine()) != null) {
-                Post post = new Post(title);
-                postRepository.save(post);
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
+//
+//    public boolean updatePostTitle(int updateId, String newTitle) {
+//        return postRepository.updatePostTitle(updateId, newTitle);
+//    }
+//
+//    public boolean deletePostById(int id) {
+//        return postRepository.delete(id);
+//    }
+//
+//    public List<Post> searchPostsByKeyword(String keyword) {
+//        return postRepository.searchPostsByKeyword(keyword);
+//    }
 }
