@@ -1,4 +1,4 @@
-package org.sopt.dto.req;
+package org.sopt.dto;
 
 public record PostCreateRequest(String title) {
 }

@@ -4,6 +4,7 @@ import org.sopt.dto.ApiResponse;
 import org.sopt.dto.req.PostCreateRequest;
 import org.sopt.dto.res.PostCreateResponse;
 import org.sopt.dto.res.PostDetailResponse;
+import org.sopt.dto.res.PostListResponse;
 import org.sopt.service.PostService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,16 +34,22 @@ public class PostController {
                 .body(body);
     }
 
-//    @GetMapping("/posts")
-//    public ResponseEntity<?> getAllPosts() {
-//        return ResponseEntity.ok(postService.getAllPosts());
-//    }
+    @GetMapping("/posts")
+    public ResponseEntity<ApiResponse<PostListResponse>> getAllPosts() {
+        PostListResponse postListResponse = postService.getAllPosts();
+
+        ApiResponse<PostListResponse> body = new ApiResponse<>(200, "응답 성공", postListResponse);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(body);
+    }
 
     @GetMapping("/posts/{id}")
     public ResponseEntity<ApiResponse<PostDetailResponse>> getPost(@PathVariable final Long id) {
-        PostDetailResponse PostDetailResponse = postService.getPost(id);
+        PostDetailResponse postDetailResponse = postService.getPost(id);
 
-        ApiResponse<PostDetailResponse> body = new ApiResponse<>(200, "응답 성공", PostDetailResponse);
+        ApiResponse<PostDetailResponse> body = new ApiResponse<>(200, "응답 성공", postDetailResponse);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
