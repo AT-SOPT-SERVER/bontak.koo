@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.sopt.common.validator.TitleValidator;
 
 @Entity
 public class Post {
@@ -17,6 +18,7 @@ public class Post {
     }
 
     public Post(String title) {
+        TitleValidator.validateTitle(title);
         this.title = title;
     }
 
@@ -26,5 +28,10 @@ public class Post {
 
     public String getTitle() {
         return this.title;
+    }
+
+    public void updateTitle(String title) {
+        TitleValidator.validateTitle(title);
+        this.title = title;
     }
 }
