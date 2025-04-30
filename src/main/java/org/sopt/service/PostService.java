@@ -11,7 +11,10 @@ import org.sopt.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -25,6 +28,8 @@ public class PostService {
 
     public PostResponse createPost(PostRequest postRequest) {
         validateDuplicateTitle(postRequest.title());
+        validatePostCreationInterval(postRepository.findTopByOrderByCreatedAtDesc());
+
         Post post = new Post(postRequest.title());
         postRepository.save(post);
 
@@ -70,5 +75,14 @@ public class PostService {
         if (postRepository.existsByTitle(title)) {
             throw new BusinessException(ErrorCode.TITLE_DUPLICATE);
         }
+    }
+
+    public void validatePostCreationInterval(Optional<Post> lastPost) {
+        lastPost.ifPresent(post -> {
+            Duration duration = Duration.between(post.getCreatedAt(), LocalDateTime.now());
+            if (duration.getSeconds() < 180 ) {
+                throw new BusinessException(ErrorCode.TIME_LIMIT);
+            }
+        });
     }
 }
