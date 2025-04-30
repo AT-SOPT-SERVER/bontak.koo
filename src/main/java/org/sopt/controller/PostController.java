@@ -1,10 +1,8 @@
 package org.sopt.controller;
 
 import org.sopt.dto.ApiResponse;
-import org.sopt.dto.req.PostCreateRequest;
-import org.sopt.dto.res.PostCreateResponse;
-import org.sopt.dto.res.PostDetailResponse;
-import org.sopt.dto.res.PostListResponse;
+import org.sopt.dto.req.*;
+import org.sopt.dto.res.*;
 import org.sopt.service.PostService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,52 +20,46 @@ public class PostController {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<ApiResponse<Void>> createPost(@RequestBody final PostCreateRequest postCreateRequest) {
-        PostCreateResponse postCreateResponse = postService.createPost(postCreateRequest);
-
-        URI location = URI.create("/posts/" + postCreateResponse.id());
-        ApiResponse<Void> body = new ApiResponse<>(201, "응답 성공", null);
+    public ResponseEntity<ApiResponse<Void>> createPost(@RequestBody final PostRequest postRequest) {
+        PostResponse postResponse = postService.createPost(postRequest);
+        URI location = URI.create("/posts/" + postResponse.id());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .header(HttpHeaders.LOCATION, location.toString())
-                .body(body);
+                .body(ApiResponse.created(null));
     }
 
     @GetMapping("/posts")
     public ResponseEntity<ApiResponse<PostListResponse>> getAllPosts() {
         PostListResponse postListResponse = postService.getAllPosts();
 
-        ApiResponse<PostListResponse> body = new ApiResponse<>(200, "응답 성공", postListResponse);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(body);
+        return ResponseEntity.ok(ApiResponse.ok(postListResponse));
     }
 
     @GetMapping("/posts/{id}")
     public ResponseEntity<ApiResponse<PostDetailResponse>> getPost(@PathVariable final Long id) {
         PostDetailResponse postDetailResponse = postService.getPost(id);
 
-        ApiResponse<PostDetailResponse> body = new ApiResponse<>(200, "응답 성공", postDetailResponse);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(body);
+        return ResponseEntity.ok(ApiResponse.ok(postDetailResponse));
     }
 
-//    @PutMapping("/posts/{id}")
-//    public boolean updatePostTitle(int updateId, String newTitle) {
-//        return postService.updatePostTitle(updateId, newTitle);
-//    }
-//
-//    @DeleteMapping("/posts/{id}")
-//    public boolean deletePostById(int id) {
-//        return postService.deletePostById(id);
-//    }
-//
-//    @GetMapping("/posts/search?keyword=")
-//    public List<Post> searchPostsByKeyword(String keyword) {
-//        return postService.searchPostsByKeyword(keyword);
-//    }
+    @PutMapping("/posts/{id}")
+    public ResponseEntity<ApiResponse<Void>> updatePostTitle(@PathVariable Long id, @RequestBody PostUpdateRequest postUpdateRequest) {
+        postService.updatePostTitle(id, postUpdateRequest);
+
+        return ResponseEntity.ok(ApiResponse.ok(null));
+    }
+
+    @DeleteMapping("/posts/{id}")
+    public ResponseEntity<ApiResponse<Void>> deletePostById(@PathVariable Long id) {
+        postService.deletePostById(id);
+        return ResponseEntity.ok(ApiResponse.ok(null));
+    }
+
+    @GetMapping("/posts/search")
+    public ResponseEntity<ApiResponse<PostListResponse>> searchPostsByKeyword(@RequestParam String keyword) {
+        PostListResponse postListResponse = postService.searchPostsByKeyword(keyword);
+        return ResponseEntity.ok(ApiResponse.ok(postListResponse));
+    }
 }
