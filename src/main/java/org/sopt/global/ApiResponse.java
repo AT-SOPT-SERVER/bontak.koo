@@ -1,4 +1,4 @@
-package org.sopt.dto;
+package org.sopt.global;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
