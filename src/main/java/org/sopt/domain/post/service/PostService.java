@@ -30,7 +30,7 @@ public class PostService {
 
     public PostResponse createPost(Long userId, PostRequest postRequest) {
         validateDuplicateTitle(postRequest.title());
-//        validatePostCreationInterval(postRepository.findTopByOrderByCreatedAtDesc());
+        validatePostCreationInterval(postRepository.findTopByOrderByCreatedAtDesc());
 
         User user = userRepository.findById(userId).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_USER));
         Post post = new Post(user, postRequest.title(), postRequest.content());
