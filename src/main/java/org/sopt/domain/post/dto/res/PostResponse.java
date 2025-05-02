@@ -1,6 +1,6 @@
-package org.sopt.dto.res;
+package org.sopt.domain.post.dto.res;
 
-import org.sopt.domain.Post;
+import org.sopt.domain.post.entity.Post;
 
 public record PostResponse(Long id) {
     public static PostResponse from(Post post) {
