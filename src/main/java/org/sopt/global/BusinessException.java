@@ -1,4 +1,4 @@
-package org.sopt.exception;
+package org.sopt.global;
 
 public class BusinessException extends RuntimeException {
     private final ErrorCode errorCode;

@@ -1,7 +1,7 @@
-package org.sopt.common.validator;
+package org.sopt.domain.post.validator;
 
-import org.sopt.exception.BusinessException;
-import org.sopt.exception.ErrorCode;
+import org.sopt.global.BusinessException;
+import org.sopt.global.ErrorCode;
 
 public class TitleValidator {
     public static void validateTitle(String title) {
@@ -11,6 +11,12 @@ public class TitleValidator {
 
         if (title.isBlank() || title == null) {
             throw new BusinessException(ErrorCode.TITLE_EMPTY);
+        }
+    }
+
+    public static void validateContent(String content) {
+        if (content.isEmpty() || content == null) {
+            throw new BusinessException(ErrorCode.CONTENT_EMPTY);
         }
     }
 }
