@@ -1,6 +1,5 @@
 package org.sopt.domain.user.controller;
 
-import org.apache.coyote.Response;
 import org.sopt.domain.user.dto.req.UserRequest;
 import org.sopt.domain.user.dto.res.UserResponse;
 import org.sopt.domain.user.service.UserService;

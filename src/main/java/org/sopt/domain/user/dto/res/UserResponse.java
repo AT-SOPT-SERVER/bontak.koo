@@ -1,6 +1,6 @@
 package org.sopt.domain.user.dto.res;
 
-import org.sopt.domain.user.entity.User;
+import org.sopt.domain.user.domain.User;
 
 public record UserResponse(
         User user

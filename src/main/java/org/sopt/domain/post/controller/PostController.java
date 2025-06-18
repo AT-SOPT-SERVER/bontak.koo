@@ -1,18 +1,19 @@
 package org.sopt.domain.post.controller;
 
-import org.sopt.domain.post.dto.res.*;
-import org.sopt.global.ApiResponse;
 import org.sopt.domain.post.dto.req.PostRequest;
 import org.sopt.domain.post.dto.req.PostUpdateRequest;
+import org.sopt.domain.post.dto.res.PostDetailResponse;
 import org.sopt.domain.post.dto.res.PostListResponse;
+import org.sopt.domain.post.dto.res.PostResponse;
+import org.sopt.domain.post.dto.res.PostSummaryListResponse;
 import org.sopt.domain.post.service.PostService;
+import org.sopt.global.ApiResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 public class PostController {

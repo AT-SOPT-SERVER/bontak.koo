@@ -11,17 +11,20 @@ public enum ErrorCode {
     REQUEST_HEADER_EMPTY(HttpStatus.BAD_REQUEST, 40006, "요청 헤더가 누락되었습니다."),
     NAME_LENGTH(HttpStatus.BAD_REQUEST, 40007, "이름은 10자를 넘을 수 없습니다."),
     CONTENT_LENGTH(HttpStatus.BAD_REQUEST, 40008, "게시글 내용은 1000자를 넘을 수 없습니다."),
+    COMMENT_EMPTY(HttpStatus.BAD_REQUEST, 40009, "댓글은 비어있을 수 없습니다."),
+    COMMENT_LENGTH(HttpStatus.BAD_REQUEST, 40010, "댓글은 300자를 넘을 수 없습니다."),
 
     NOT_FOUND_URL(HttpStatus.NOT_FOUND, 40401, "지원하지 않는 URL입니다."),
     NOT_FOUND_POST(HttpStatus.NOT_FOUND, 40402, "존재하지 않는 게시물입니다."),
     NOT_FOUND_USER(HttpStatus.NOT_FOUND, 40403, "존재하지 않는 유저입니다."),
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, 40404, "존재하지 않는 댓글입니다."),
 
     METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, 40501, "잘못된 HTTP method 요청입니다."),
 
     TITLE_DUPLICATE(HttpStatus.CONFLICT, 40901, "중복된 게시글 제목입니다."),
 
-    KEYWORD_EMPTY(HttpStatus.NOT_FOUND, 900, "으이구 인간아 ᕙ( ︡과젝’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง"),
-    ;
+    KEYWORD_EMPTY(HttpStatus.NOT_FOUND, 900, "으이구 인간아 ᕙ( ︡과젝’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง 으이구 인간아 ᕙ( ︡’︡益’︠)ง");
+
 
     private final HttpStatus status;
     private final int code;
