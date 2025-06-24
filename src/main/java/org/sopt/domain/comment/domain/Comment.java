@@ -1,14 +1,18 @@
 package org.sopt.domain.comment.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.sopt.domain.comment.validator.CommentValidator;
+import org.sopt.domain.likes.domain.CommentLike;
 import org.sopt.domain.post.domain.Post;
 
+import java.util.List;
+
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
 public class Comment {
@@ -21,6 +25,9 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
     private Post post;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<CommentLike> likes;
 
     public Comment(String text, Long author, Post post) {
         CommentValidator.validateText(text);
