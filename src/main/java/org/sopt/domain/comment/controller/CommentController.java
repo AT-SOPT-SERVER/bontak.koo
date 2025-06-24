@@ -1,5 +1,6 @@
 package org.sopt.domain.comment.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.sopt.domain.comment.dto.req.CommentRequest;
 import org.sopt.domain.comment.dto.res.CommentResponse;
 import org.sopt.domain.comment.service.CommentService;
@@ -9,14 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/comments")
 public class CommentController {
     private final CommentService commentService;
 
-    public CommentController(CommentService commentService) {
-        this.commentService = commentService;
-    }
-
-    @PostMapping("/comments")
+    @PostMapping
     public ResponseEntity<ApiResponse<Void>> createComment(@RequestHeader Long userId, @RequestBody final CommentRequest commentRequest) {
         CommentResponse commentResponse = commentService.createComment(userId, commentRequest);
 
@@ -25,14 +24,14 @@ public class CommentController {
                 .body(ApiResponse.created(null));
     }
 
-    @PutMapping("/comments/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> updateComment(@PathVariable Long id, @RequestBody final CommentRequest commentRequest) {
         commentService.updateComment(id, commentRequest);
 
         return ResponseEntity.ok(ApiResponse.ok(null));
     }
 
-    @DeleteMapping("/comments/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(@PathVariable Long id) {
         commentService.deleteCommentById(id);
         return ResponseEntity.ok(ApiResponse.ok(null));

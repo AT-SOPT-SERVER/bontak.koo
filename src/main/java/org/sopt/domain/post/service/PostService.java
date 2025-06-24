@@ -1,5 +1,6 @@
 package org.sopt.domain.post.service;
 
+import lombok.RequiredArgsConstructor;
 import org.sopt.domain.comment.repository.CommentRepository;
 import org.sopt.domain.post.domain.Post;
 import org.sopt.domain.post.dto.req.PostRequest;
@@ -20,16 +21,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-
-    public PostService(PostRepository postRepository, UserRepository userRepository, CommentRepository commentRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-        this.commentRepository = commentRepository;
-    }
 
     public PostResponse createPost(Long userId, PostRequest postRequest) {
         validateDuplicateTitle(postRequest.title());
@@ -92,5 +88,9 @@ public class PostService {
                 throw new BusinessException(ErrorCode.TIME_LIMIT);
             }
         });
+    }
+
+    public Post findPost(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
     }
 }
