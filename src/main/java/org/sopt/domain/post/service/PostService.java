@@ -1,14 +1,16 @@
 package org.sopt.domain.post.service;
 
-import org.sopt.domain.post.dto.res.*;
-import org.sopt.domain.post.entity.Post;
+import lombok.RequiredArgsConstructor;
+import org.sopt.domain.comment.repository.CommentRepository;
+import org.sopt.domain.post.domain.Post;
 import org.sopt.domain.post.dto.req.PostRequest;
 import org.sopt.domain.post.dto.req.PostUpdateRequest;
-import org.sopt.domain.user.entity.User;
+import org.sopt.domain.post.dto.res.*;
+import org.sopt.domain.post.repository.PostRepository;
+import org.sopt.domain.user.domain.User;
 import org.sopt.domain.user.repository.UserRepository;
 import org.sopt.global.BusinessException;
 import org.sopt.global.ErrorCode;
-import org.sopt.domain.post.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,14 +21,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
-
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-    }
+    private final CommentRepository commentRepository;
 
     public PostResponse createPost(Long userId, PostRequest postRequest) {
         validateDuplicateTitle(postRequest.title());
@@ -45,12 +44,12 @@ public class PostService {
         return PostSummaryListResponse.of(summaries);
     }
 
-
     @Transactional(readOnly = true)
     public PostDetailResponse getPost(final Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
+        List<CommentDto> comments = commentRepository.findByPostId(id);
 
-        return PostDetailResponse.of(post.getId(), post.getTitle(), post.getContent(), post.getUser().getId());
+        return PostDetailResponse.of(post.getId(), post.getTitle(), post.getContent(), post.getUser().getId(), comments);
     }
 
     public void updatePostTitle(Long id, PostUpdateRequest postUpdateRequest) {
@@ -89,5 +88,9 @@ public class PostService {
                 throw new BusinessException(ErrorCode.TIME_LIMIT);
             }
         });
+    }
+
+    public Post findPost(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_POST));
     }
 }

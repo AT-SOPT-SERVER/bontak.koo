@@ -1,12 +1,22 @@
-package org.sopt.domain.post.entity;
+package org.sopt.domain.post.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.sopt.domain.comment.domain.Comment;
+import org.sopt.domain.likes.domain.PostLike;
 import org.sopt.domain.post.validator.TitleValidator;
-import org.sopt.domain.user.entity.User;
+import org.sopt.domain.user.domain.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Setter
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,13 +25,15 @@ public class Post {
     private String content;
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "userId")
     private User user;
 
-    public Post() {
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
 
-    }
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<PostLike> likes;
 
     public Post(User user, String title, String content) {
         TitleValidator.validateTitle(title);
@@ -30,30 +42,6 @@ public class Post {
         this.title = title;
         this.content = content;
         this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public void updateTitle(String title, String content) {
